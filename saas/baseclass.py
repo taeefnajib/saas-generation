@@ -52,7 +52,7 @@ class UserConfig(BaseModel):
     tier_downgradation_probability = 0.05
 
 class SubscriptionConfig(BaseModel):
-    subscription_tiers: Dict[str, Subscription] = {
+    subscription_tiers: Dict[int, Subscription] = {
       1: Subscription(
         name = "free",
         price = 0.0

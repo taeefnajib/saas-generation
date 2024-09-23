@@ -1,0 +1,220 @@
+{
+  "metadata": {
+    "number_of_sessions": 10000,
+    "batch_size": 1000,
+    "start_date": "2024-01-01T00:00:00.000",
+    "end_date": "2024-12-31T23:59:59.000",
+    "data_dist": "exponential",
+    "daily_cyclicality": "normal",
+    "overall_scale_factor": 400,
+    "daily_scale_factor": 5,
+    "data_path": "./data"
+  },
+  "feature_config": {
+    "avg_features_used_per_session": 3,
+    "max_features_per_session": 5,
+    "share_probability": 0.05,
+    "fav_probability": 0.02,
+    "features": {
+      "1": {
+        "feature_name": "Dashboard",
+        "usage_probability": 0.5,
+        "max_time_spent": 10,
+        "tiers_available_in": [
+          "free",
+          "basic",
+          "premium"
+        ]
+      },
+      "2": {
+        "feature_name": "API Access",
+        "usage_probability": 0.3,
+        "max_time_spent": 20,
+        "tiers_available_in": [
+          "basic",
+          "premium"
+        ]
+      },
+      "3": {
+        "feature_name": "Analytics",
+        "usage_probability": 0.4,
+        "max_time_spent": 15,
+        "tiers_available_in": [
+          "premium"
+        ]
+      },
+      "4": {
+        "feature_name": "Team Collaboration",
+        "usage_probability": 0.4,
+        "max_time_spent": 25,
+        "tiers_available_in": [
+          "basic",
+          "premium"
+        ]
+      },
+      "5": {
+        "feature_name": "File Upload",
+        "usage_probability": 0.3,
+        "max_time_spent": 5,
+        "tiers_available_in": [
+          "free",
+          "basic",
+          "premium"
+        ]
+      }
+    }
+  },
+  "page_config": {
+    "max_general_page_visit_duration": 240,
+    "pages": {
+      "1": {
+        "page_title": "Home",
+        "page_path": "/",
+        "page_location": "www.yourwebsite.com/",
+        "page_type": "landing",
+        "max_page_visit_duration": 60,
+        "initial_page_probability": 0.25
+      },
+      "2": {
+        "page_title": "About",
+        "page_path": "/about",
+        "page_location": "www.yourwebsite.com/about",
+        "page_type": "general",
+        "max_page_visit_duration": 15,
+        "initial_page_probability": 0.2
+      },
+      "3": {
+        "page_title": "Dashboard",
+        "page_path": "/dashboard",
+        "page_location": "www.yourwebsite.com/dashboard",
+        "page_type": "dashboard",
+        "max_page_visit_duration": 200,
+        "initial_page_probability": 0
+      },
+      "4": {
+        "page_title": "Settings",
+        "page_path": "/settings",
+        "page_location": "www.yourwebsite.com/settings",
+        "page_type": "settings",
+        "max_page_visit_duration": 50,
+        "initial_page_probability": 0
+      },
+      "5": {
+        "page_title": "Feature",
+        "page_path": "/feature",
+        "page_location": "www.yourwebsite.com/feature",
+        "page_type": "feature",
+        "max_page_visit_duration": 150,
+        "initial_page_probability": 0
+      },
+      "6": {
+        "page_title": "Pricing",
+        "page_path": "/pricing",
+        "page_location": "www.yourwebsite.com/pricing",
+        "page_type": "general",
+        "max_page_visit_duration": 30,
+        "initial_page_probability": 0.25
+      },
+      "7": {
+        "page_title": "Signup",
+        "page_path": "/register",
+        "page_location": "www.yourwebsite.com/register",
+        "page_type": "signup",
+        "max_page_visit_duration": 120,
+        "initial_page_probability": 0.05
+      },
+      "8": {
+        "page_title": "Login",
+        "page_path": "/login",
+        "page_location": "www.yourwebsite.com/login",
+        "page_type": "signin",
+        "max_page_visit_duration": 30,
+        "initial_page_probability": 0
+      },
+      "9": {
+        "page_title": "Blog",
+        "page_path": "/blog",
+        "page_location": "www.yourwebsite.com/blog",
+        "page_type": "general",
+        "max_page_visit_duration": 90,
+        "initial_page_probability": 0.25
+      }
+    },
+    "pageview_journey": {
+      "landing": {
+        "dashboard": 0.2,
+        "general": 0.1,
+        "settings": 0.1,
+        "feature": 0.5,
+        "exit": 0.1
+      },
+      "general": {
+        "settings": 0.2,
+        "feature": 0.5,
+        "dashboard": 0.1,
+        "exit": 0.2
+      },
+      "feature": {
+        "dashboard": 0.1,
+        "feature": 0.8,
+        "exit": 0.1
+      },
+      "signup": {
+        "signin": 0.8,
+        "exit": 0.2
+      },
+      "signin": {
+        "landing": 1
+      },
+      "settings": {
+        "general": 0.2,
+        "dashboard": 0.2,
+        "landing": 0.2,
+        "feature": 0.4
+      },
+      "dashboard": {
+        "feature": 0.6,
+        "landing": 0.1,
+        "general": 0.2,
+        "settings": 0.1
+      },
+      "exit": {}
+    }
+  },
+  "user_config": {
+    "number_of_user": 50,
+    "retention_scaling_factor": 500,
+    "relogin_probability": 0.5,
+    "mobile_traffic": 0.7,
+    "location_type": "local",
+    "local_percentage": 0,
+    "churn_dist": "normal",
+    "initial_tier_id": 1,
+    "tier_upgradation_probability": 0.8,
+    "tier_downgradation_probability": 0.05
+  },
+  "order_config": {
+    "max_prod_qty": 4,
+    "max_prod_in_cart": 5,
+    "max_order_per_user": 2,
+    "tax_rate": 0.15,
+    "shipping_floor": 3.99,
+    "shipping_ceiling": 9.99
+  },
+  "subscription_config": {
+    "subscription_tiers": {
+      "1": {
+        "name": "free",
+        "price": 0
+      },
+      "2": {
+        "name": "basic",
+        "price": 19.99
+      },
+      "3": {
+        "name": "premium",
+        "price": 49.99
+      }
+    }
+  }
+}

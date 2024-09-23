@@ -239,17 +239,52 @@ def generate_users(
 
     return sorted_users_dict
 
+def extract_attributes(data_dict):
+    """
+    This function handles converting objects (such as Pydantic BaseModel objects)
+    into dictionaries containing their attributes.
+    """
+    processed_data = []
+    
+    # Check if the first value is a BaseModel instance (or if values are objects)
+    for key, value in data_dict.items():
+        if isinstance(value, BaseModel):  # If it's a Pydantic model, extract attributes
+            data_dict_row = {**value.dict()}  # Convert model to dict
+            data_dict_row['idx'] = key  # Keep the original key
+            processed_data.append(data_dict_row)
+        else:
+            # If it's not a BaseModel object, assume it's already in a suitable format
+            # Keep the original structure (key-value pairs)
+            processed_data.append({"idx": key, **value})
+
+    return processed_data
+
 def generate_csv_from_data(data_dict, filename, data_path, append=True):
     file_path = os.path.join(data_path, filename)
 
-    # Convert the dictionary to a DataFrame
-    df = pd.DataFrame.from_dict(data_dict, orient='index')
+    # Check and convert objects to dictionaries where necessary
+    processed_data = extract_attributes(data_dict)
+
+    # Create DataFrame from the processed data
+    df = pd.DataFrame(processed_data)
 
     # If append is True, check if the file exists and append data, otherwise create new file
     if append and os.path.exists(file_path):
         df.to_csv(file_path, mode='a', header=False, index=False)
     else:
         df.to_csv(file_path, mode='w', header=True, index=False)
+
+# def generate_csv_from_data(data_dict, filename, data_path, append=True):
+#     file_path = os.path.join(data_path, filename)
+
+#     # Convert the dictionary to a DataFrame
+#     df = pd.DataFrame.from_dict(data_dict, orient='index')
+
+#     # If append is True, check if the file exists and append data, otherwise create new file
+#     if append and os.path.exists(file_path):
+#         df.to_csv(file_path, mode='a', header=False, index=False)
+#     else:
+#         df.to_csv(file_path, mode='w', header=True, index=False)
 
 def add_id_column_to_csv(filename, data_path):
     file_path = os.path.join(data_path, filename)
@@ -261,6 +296,8 @@ def add_id_column_to_csv(filename, data_path):
         # If 'id' column is missing, generate it
         if 'id' not in df.columns:
             df.insert(0, 'id', range(1, len(df) + 1))
+        
+        df = df.drop(columns=["idx"])
         
         # Write back the CSV with the id column
         df.to_csv(file_path, index=False)

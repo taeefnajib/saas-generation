@@ -411,7 +411,7 @@ def run_saas_batch(params: SimulationParams, original_users, features, batch_siz
                         "lng": user_location["Longitude"],
                         "language": language_choice["language_name"],
                         "locale": language_choice["locale"],
-                        "initial_tier": str(params.subscription_config.subscription_tiers[subscription_tier_id].name),
+                        "initial_tier": str(params.subscription_config.subscription_tiers[int(subscription_tier_id)].name),
                         "subscription_tier": str(params.subscription_config.subscription_tiers[subscription_tier_id].name),
                         "churn_date": churn_time
                     }

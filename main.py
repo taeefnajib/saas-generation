@@ -48,6 +48,10 @@ def run_simulation(params: SimulationParams):
     session_left = params.metadata.number_of_sessions
     batch_size = params.metadata.batch_size
 
+    # Dictionary to store deduplicated users based on user_id
+    seen_user_ids = set()  # To track user_ids that have been added
+
+
     while session_left > 0:
         batch_count += 1
         if session_left <= batch_size:
@@ -67,7 +71,15 @@ def run_simulation(params: SimulationParams):
             feature_consumptions,
         ) = run_saas_batch(params, original_users, features, batch_size)
 
-        
+        # Deduplicate cumulative_users based on user_id
+        deduplicated_users = {}
+        for key, user_info in users.items():
+            user_id = user_info['user_id']
+            if user_id not in seen_user_ids:
+                deduplicated_users[key] = user_info
+                seen_user_ids.add(user_id)
+    
+
         # Append data directly to CSV files
         generate_csv_from_data(pageviews, "pageviews.csv", data_path=params.metadata.data_path)
         generate_csv_from_data(logins, "logins.csv", data_path=params.metadata.data_path)
@@ -75,8 +87,8 @@ def run_simulation(params: SimulationParams):
         generate_csv_from_data(social_shares, "social_shares.csv", data_path=params.metadata.data_path)
         generate_csv_from_data(favorites, "favorites.csv", data_path=params.metadata.data_path)
         generate_csv_from_data(visits, "visits.csv", data_path=params.metadata.data_path)
-        generate_csv_from_data(features, "features.csv", data_path=params.metadata.data_path)
-        generate_csv_from_data(users, "users.csv", data_path=params.metadata.data_path)
+        # generate_csv_from_data(features, "features.csv", data_path=params.metadata.data_path)
+        generate_csv_from_data(deduplicated_users, "users.csv", data_path=params.metadata.data_path)
         generate_csv_from_data(tier_upgradations, "tier_upgradations.csv", data_path=params.metadata.data_path)
         generate_csv_from_data(feature_consumptions, "feature_consumptions.csv", data_path=params.metadata.data_path)
 
@@ -89,6 +101,7 @@ def run_simulation(params: SimulationParams):
 
         print(f"Batch #{batch_count} processed in {batch_end - batch_start:.2f} seconds.")
 
+    generate_csv_from_data(original_features, "features.csv", data_path=params.metadata.data_path)
     # Add id column to CSV files after all batch runs
     add_id_column_to_csv("pageviews.csv", data_path=params.metadata.data_path)
     add_id_column_to_csv("logins.csv", data_path=params.metadata.data_path)
@@ -112,6 +125,3 @@ def run_simulation(params: SimulationParams):
 # uvicorn main:app --reload
 # {"metadata":{"number_of_sessions": 5000},"user_config":{"location_type":"global","local_percentage":0.85}}
 # {"metadata":{"number_of_sessions": 5000, "data_path":"../saas_pipeline/saas_pipeline/data"},"user_config":{"location_type":"global","local_percentage":0.85}}
-# {"number_of_sessions": 1000,"number_of_user": 50, "location_type":"global","local_percentage":0.85, "data_path":"../ecom_pipeline/ecom_pipeline/data"}
-# Need to change tier based on tier_upgradation_probability and need to create payment based on subscription_tier and churn_date
-# need to choose features based on tier
