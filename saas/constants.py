@@ -512,8 +512,8 @@ country_codes = {
 }
 
 # Load CSV files
-us_cities_df = pd.read_csv("us_cities_population.csv")
-global_cities_df = pd.read_csv("global_cities_population.csv")
+us_cities_df = pd.read_csv("saas/us_cities_population.csv")
+global_cities_df = pd.read_csv("saas/global_cities_population.csv")
 
 logins = {}
 
