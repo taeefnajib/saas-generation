@@ -381,12 +381,6 @@ def run_saas_batch(params: SimulationParams, original_users, features, batch_siz
 
                     churn_time = signup_time + np.timedelta64(int(churn_duration), "s")
 
-                    # Ensure churn_time is between signup_time and end_time
-                    # if churn_time < signup_time:
-                    #     churn_time = signup_time
-                    # elif churn_time > end_time:
-                    #     churn_time = end_time
-
                     new_accounts[k] = {
                         "signup_time": random_timestamp,
                         "user_id": str(gen_rand_strs(size=1, str_len=16)[0]),

@@ -110,41 +110,6 @@ def find_page_ids_by_type(page_type, pages):
     ]
 
 
-# Function to generate products dictionary
-# def generate_products(number_of_products, max_prod_qty, avg_rev_per_order):
-#     products = {}
-#     avg_qty = (1 + max_prod_qty) / 2
-#     avg_price = avg_rev_per_order / avg_qty
-#     lower_price = avg_price * 0.5
-#     higher_price = avg_price * 1.5
-#     # Mean and standard deviation for the normal distribution (mean = 0.5 for center)
-#     mean_popularity = 0.5
-#     std_dev_popularity = 0.2  # Adjust this for sprea
-#     for i in range(1, (number_of_products + 1)):  # Creating products
-#         product_brand = str(gen_rand_categories(categories=product_brands, size=1)[0])
-#         product_category = str(
-#             gen_rand_categories(categories=product_categories, size=1)[0]
-#         )
-#         # Generate a normally distributed popularity score and clip it between 0 and 1
-#         popularity_score = np.clip(
-#             np.random.normal(mean_popularity, std_dev_popularity), 0, 1
-#         )
-#         products[i] = {
-#             "product_sku": str(gen_rand_strs(size=1, str_len=16)[0]),
-#             "product_name": str(mim.text.word()).capitalize(),
-#             "product_brand": product_brand,
-#             "product_category": product_category,
-#             "product_colors": product_colors,
-#             "product_sizes": product_sizes,
-#             "price": round(rng.uniform(lower_price, higher_price), 2),
-#             "product_popularity_score": round(popularity_score, 2),
-#             "no_of_add_to_carts": 0,
-#             "qty_added_to_carts": 0,
-#             "no_of_orders": 0,
-#             "qty_ordered": 0,
-#         }
-#     return products
-
 
 def generate_users(
     number_of_user,
@@ -161,8 +126,6 @@ def generate_users(
     start_time = np.datetime64(start_time)
     end_time = np.datetime64(end_time)
 
-    # Define subscription tiers
-    # subscription_tiers = ["free", "basic", "premium"]
 
     # Generate users
     for idx in range(1, (number_of_user + 1)):
@@ -274,17 +237,6 @@ def generate_csv_from_data(data_dict, filename, data_path, append=True):
     else:
         df.to_csv(file_path, mode='w', header=True, index=False)
 
-# def generate_csv_from_data(data_dict, filename, data_path, append=True):
-#     file_path = os.path.join(data_path, filename)
-
-#     # Convert the dictionary to a DataFrame
-#     df = pd.DataFrame.from_dict(data_dict, orient='index')
-
-#     # If append is True, check if the file exists and append data, otherwise create new file
-#     if append and os.path.exists(file_path):
-#         df.to_csv(file_path, mode='a', header=False, index=False)
-#     else:
-#         df.to_csv(file_path, mode='w', header=True, index=False)
 
 def add_id_column_to_csv(filename, data_path):
     file_path = os.path.join(data_path, filename)
@@ -302,150 +254,6 @@ def add_id_column_to_csv(filename, data_path):
         # Write back the CSV with the id column
         df.to_csv(file_path, index=False)
 
-# def generate_csv_from_data(data_dict, filename, data_path, append=True):
-#     file_path = os.path.join(data_path, filename)
-    
-#     # Convert the dictionary to a DataFrame
-#     df = pd.DataFrame.from_dict(data_dict, orient='index')
-    
-#     # Initialize the starting id value
-#     start_id = 1
-    
-#     if append and os.path.exists(file_path):
-#         # If the file exists and we are appending, read the file to get the max id
-#         existing_df = pd.read_csv(file_path)
-#         if 'id' in existing_df.columns:
-#             max_id = existing_df['id'].max()
-#             start_id = max_id + 1  # Increment the id starting point
-    
-#     # Add the incremental id column to the DataFrame
-#     df.insert(0, 'id', range(start_id, start_id + len(df)))
-
-#     # Append or write the CSV
-#     if append and os.path.exists(file_path):
-#         df.to_csv(file_path, mode='a', header=False, index=False)
-#     else:
-#         df.to_csv(file_path, mode='w', header=True, index=False)
-
-# def generate_csv_from_data(
-#     data: Dict[int, Union[BaseModel, Dict]], filename: str, data_path="./data", append: bool = False
-# ):
-#     filepath = os.path.join(data_path, filename)
-
-#     if len(data) > 0:
-#         # Get an example instance
-#         example_instance = next(iter(data.values()))
-
-#         if isinstance(example_instance, dict):
-#             # If the values are dictionaries, infer the fieldnames from the first dictionary
-#             first_item = next(iter(example_instance.values()))
-#             if isinstance(first_item, dict):
-#                 fieldnames = ["id"] + list(first_item.keys())
-#             else:
-#                 # If not a dictionary, infer fieldnames from the dictionary keys
-#                 fieldnames = ["id"] + list(example_instance.keys())
-#         else:
-#             # If the values are instances of BaseModel, infer the fieldnames from the model's annotations
-#             if hasattr(example_instance, "__annotations__"):
-#                 fieldnames = ["id"] + list(example_instance.__annotations__.keys())
-#             else:
-#                 raise TypeError(
-#                     "The provided data does not contain Pydantic BaseModel instances or dictionaries."
-#                 )
-
-#         # Open the file in append mode if requested
-#         with open(filepath, mode="a" if append else "w", newline="") as file:
-#             writer = csv.DictWriter(file, fieldnames=fieldnames)
-
-#             # Write the header only if the file is opened in write mode
-#             if not append or file.tell() == 0:
-#                 writer.writeheader()
-
-#             # Write the data
-#             for index, (item_id, item_data) in enumerate(data.items(), start=1):
-#                 row_data = {"id": index}  # Add the unique ID
-#                 if isinstance(item_data, dict):
-#                     # Convert datetime64 and other non-serializable types to string
-#                     for key, value in item_data.items():
-#                         if isinstance(value, (np.datetime64,)):
-#                             row_data[key] = str(value)
-#                         else:
-#                             row_data[key] = value
-#                 elif isinstance(item_data, BaseModel):
-#                     # Convert datetime64 and other non-serializable types to string
-#                     for key, value in item_data.dict().items():
-#                         if isinstance(value, (np.datetime64,)):
-#                             row_data[key] = str(value)
-#                         else:
-#                             row_data[key] = value
-#                 else:
-#                     raise TypeError("The provided data contains invalid types.")
-#                 writer.writerow(row_data)
-
-    #     print(
-    #         f"CSV file '{filename}' generated successfully in the '{data_path}' folder."
-    #     )
-    # else:
-    #     print(f"CSV file '{filename}' is not generated since there is no data.")
-
-# def generate_csv_from_data(
-#     data: Dict[int, Union[BaseModel, Dict]], filename: str, data_path="./data"
-# ):
-#     filepath = os.path.join(data_path, filename)
-
-#     if len(data) > 0:
-#         # Get an example instance
-#         example_instance = next(iter(data.values()))
-
-#         if isinstance(example_instance, dict):
-#             # If the values are dictionaries, infer the fieldnames from the first dictionary
-#             first_item = next(iter(example_instance.values()))
-#             if isinstance(first_item, dict):
-#                 fieldnames = ["id"] + list(first_item.keys())
-#             else:
-#                 # If not a dictionary, infer fieldnames from the dictionary keys
-#                 fieldnames = ["id"] + list(example_instance.keys())
-#         else:
-#             # If the values are instances of BaseModel, infer the fieldnames from the model's annotations
-#             if hasattr(example_instance, "__annotations__"):
-#                 fieldnames = ["id"] + list(example_instance.__annotations__.keys())
-#             else:
-#                 raise TypeError(
-#                     "The provided data does not contain Pydantic BaseModel instances or dictionaries."
-#                 )
-
-#         with open(filepath, mode="w", newline="") as file:
-#             writer = csv.DictWriter(file, fieldnames=fieldnames)
-
-#             # Write the header
-#             writer.writeheader()
-
-#             # Write the data
-#             for index, (item_id, item_data) in enumerate(data.items(), start=1):
-#                 row_data = {"id": index}  # Add the unique ID
-#                 if isinstance(item_data, dict):
-#                     # Convert datetime64 and other non-serializable types to string
-#                     for key, value in item_data.items():
-#                         if isinstance(value, (np.datetime64,)):
-#                             row_data[key] = str(value)
-#                         else:
-#                             row_data[key] = value
-#                 elif isinstance(item_data, BaseModel):
-#                     # Convert datetime64 and other non-serializable types to string
-#                     for key, value in item_data.dict().items():
-#                         if isinstance(value, (np.datetime64,)):
-#                             row_data[key] = str(value)
-#                         else:
-#                             row_data[key] = value
-#                 else:
-#                     raise TypeError("The provided data contains invalid types.")
-#                 writer.writerow(row_data)
-
-#         print(
-#             f"CSV file '{filename}' generated successfully in the '{data_path}' folder."
-#         )
-#     else:
-#         print(f"CSV file '{filename}' is not generated since there is no data.")
 
 def gen_random_date(
     start_date_str, end_date_str, data_dist="exponential", overall_scale_factor=2
@@ -557,123 +365,6 @@ def update_product_attributes(
             if hasattr(feature_info, key):
                 setattr(feature_info, key, value)
 
-
-
-# def generate_payments(params, users, subscription_tiers, tier_upgradations):
-#     payments = {}
-
-#     # Create a reverse lookup for subscription tier names
-#     tier_name_to_id = {v.name: k for k, v in subscription_tiers.items()}
-
-#     for user_key, user_info in users.items():
-#         signup_date = user_info['signup_time']
-#         churn_date = user_info.get('churn_date', None)
-#         current_tier = user_info.get('subscription_tier', None)
-#         user_id = user_info['user_id']  # Unique user_id to include in the payment record
-
-#         # Skip users without a subscription_tier
-#         if current_tier is None:
-#             print(f"Skipping user {user_id} due to missing subscription_tier.")
-#             continue
-
-#         payment_dates = []
-
-#         # Ensure that signup_date and churn_date are datetime objects
-#         if isinstance(signup_date, np.datetime64):
-#             signup_date = signup_date.astype('M8[ms]').astype('O')  # Convert numpy datetime to Python datetime
-#         if churn_date and isinstance(churn_date, np.datetime64):
-#             churn_date = churn_date.astype('M8[ms]').astype('O')
-
-#         # If user has churned, stop payments at churn_date, otherwise till the end date
-#         end_date = churn_date if churn_date else params.metadata.end_date
-
-#         # Convert end_date to Python datetime if it's a numpy.datetime64 or an int
-#         if isinstance(end_date, np.datetime64):
-#             end_date = end_date.astype('M8[ms]').astype(datetime)
-#         elif isinstance(end_date, int):
-#             end_date = datetime.utcfromtimestamp(end_date / 10000)
-
-#         # Generate payment dates every 30 days starting from signup_date
-#         payment_date = signup_date
-
-#         while payment_date < end_date:
-#             payment_dates.append(payment_date)
-#             payment_date += timedelta(days=30)
-
-#         # Initialize with the user's original subscription tier
-#         tier_upgrades = tier_upgradations.get(user_key, [])
-        
-#         if not isinstance(tier_upgrades, list):
-#             tier_upgrades = []
-
-#         next_upgrade_index = 0
-#         next_upgrade = tier_upgrades[next_upgrade_index] if tier_upgrades else None
-
-#         # For each payment date, check if there is a tier upgrade
-#         for date in payment_dates:
-#             # Check if a tier upgrade happened before or on this date
-#             while next_upgrade and next_upgrade['upgrade_date'] <= date:
-#                 print(f"User {user_id} upgraded from {current_tier} to {next_upgrade['new_tier']} on {next_upgrade['upgrade_date']}")
-#                 current_tier = next_upgrade['new_tier']
-#                 next_upgrade_index += 1
-
-#                 if next_upgrade_index < len(tier_upgrades):
-#                     next_upgrade = tier_upgradations.get(user_key, [])[next_upgrade_index]
-#                 else:
-#                     next_upgrade = None
-
-#             # Find the subscription price for the current tier
-#             current_tier_id = tier_name_to_id.get(current_tier)  
-#             if current_tier_id is None:
-#                 raise ValueError(f"Invalid tier name: {current_tier}")
-
-#             tier_info = subscription_tiers[current_tier_id]
-#             price = tier_info.price
-
-#             # Record the payment, adding user_id to the payment information
-#             if user_key not in payments:
-#                 payments[user_key] = []
-            
-#             payments[user_key].append({
-#                 'user_id': user_id,  # Add unique user_id to the payment entry
-#                 'date': date,
-#                 'tier': tier_info.name,
-#                 'price': price
-#             })
-
-#     return payments
-
-# def generate_payments(params, users, subscription_tiers, tier_upgradations):
-#     payments = {}
-
-#     # Create a reverse lookup for subscription tier names
-#     tier_name_to_id = {v.name: k for k, v in subscription_tiers.items()}
-
-#     idx = 1
-
-#     for user_key, user_info in users.items():
-#         signup_date = user_info['signup_time']
-#         churn_date = user_info.get('churn_date', None)
-#         initial_tier = user_info.get('initial_tier', None)
-#         user_id = user_info['user_id'] 
-
-#         tier_id = tier_name_to_id[initial_tier]
-#         payment_amount = subscription_tiers[tier_id].price
-
-#         # payment_dates = []
-#         # If user has churned, stop payments at churn_date, otherwise till the end date
-#         end_date = churn_date if churn_date <= params.metadata.end_date else params.metadata.end_date
-#         payment_date = signup_date.astype('M8[ms]').astype(datetime)
-     
-#         while payment_date < end_date:
-#             # payment_dates.append(payment_date)
-#             payment_date += timedelta(days=30)
-#             payment_dict = {idx: {"payment_date": payment_date, "user_id": user_id, "payment_amount": payment_amount}}
-#             payments.update(payment_dict)
-#             idx += 1
-        
-
-#     return payments
 
 
 def generate_payments(params, users, subscription_tiers, tier_upgradations):
