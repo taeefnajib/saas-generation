@@ -1,4 +1,13 @@
 # API Documentation: Data Generation Endpoint
+### Install Dependencies:
+* Create a virtual environment: `virtualenv venv`
+* Activate the venv: `source venv/bin/activate`
+* Install packages: `pip install -r requirements`
+### Run Server:
+Run this on terminal:
+```
+uvicorn main:app --reload
+```
 ### Endpoint
 ```
 http://127.0.0.1:8000/simulations/saas
